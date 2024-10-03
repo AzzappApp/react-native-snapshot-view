@@ -49,7 +49,7 @@ def supportsNamespace() {
 
 android {
   if (supportsNamespace()) {
-    namespace "com.azzapp.reactnativesnapshotview"
+    namespace "com.azzapp.rnsnapshotview"
 
     sourceSets {
       main {
@@ -121,6 +121,6 @@ if (isNewArchitectureEnabled()) {
   react {
     jsRootDir = file("../src/")
     libraryName = "ReactNativeSnapshotViewView"
-    codegenJavaPackageName = "com.azzapp.reactnativesnapshotview"
+    codegenJavaPackageName = "com.azzapp.rnsnapshotview"
   }
 }

@@ -1,0 +1,13 @@
+diff --git a/lib/utils/patchCodegen.js b/lib/utils/patchCodegen.js
+index 611e072d90e5fa676bf937a94b4d9a4207af102b..8d08999a4e06c3c504943ac5ff840b42e59c38f0 100644
+--- a/lib/utils/patchCodegen.js
++++ b/lib/utils/patchCodegen.js
+@@ -57,7 +57,7 @@ packageJson, report) {
+     const newFilePath = _path.default.resolve(newPackagePath, file);
+     await _fsExtra.default.rename(filePath, newFilePath);
+   }));
+-  await _fsExtra.default.rm(_path.default.resolve(codegenAndroidPath, 'java/com/facebook'), {
++  await _fsExtra.default.rm(_path.default.resolve(codegenAndroidPath, 'java/com/facebook/fbreact'), {
+     recursive: true
+   });
+ }

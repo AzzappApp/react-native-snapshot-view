@@ -12,12 +12,18 @@ npm install @azzapp/react-native-snapshot-view
 
 
 ```js
-import { ReactNativeSnapshotViewView } from "@azzapp/react-native-snapshot-view";
+import { captureSnapshot, SnapshotRenderer } from "@azzapp/react-native-snapshot-view";
 
-// ...
+// capture a snapshot of a view
+const snapshotID = await captureSnapshot(viewRef.current);
 
-<ReactNativeSnapshotViewView color="tomato" />
+
+// Display the captured snapshot
+
+<SnapshotRenderer snapshotID={snapshotID} />
 ```
+
+>:warning: captured snapshot are kept in memory, either use `releaseSnapshot` to release them, or let the `SnapshotRenderer` component release the snapshot on unmount.
 
 
 ## Contributing

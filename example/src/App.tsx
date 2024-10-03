@@ -1,10 +1,43 @@
-import { StyleSheet, View } from 'react-native';
-import { ReactNativeSnapshotViewView } from '@azzapp/react-native-snapshot-view';
+import { Button, StyleSheet, View } from 'react-native';
+import {
+  SnapshotRenderer,
+  captureSnapshot,
+} from '@azzapp/react-native-snapshot-view';
+import { useEffect, useRef, useState } from 'react';
 
 export default function App() {
+  const [snapshotID, setSnapshotID] = useState<string | null>(null);
+  const boxRef = useRef<View>(null);
+  const onCaptureSnapshot = () => {
+    if (snapshotID) {
+      setSnapshotID(null);
+    }
+    if (boxRef.current) {
+      captureSnapshot(boxRef.current).then(
+        (id) => {
+          setSnapshotID(id);
+        },
+        (err) => {
+          console.log(err);
+        }
+      );
+    }
+  };
+  const [color, setColor] = useState('red');
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setColor((prevColor) => (prevColor === 'red' ? 'blue' : 'red'));
+    }, 1000);
+    return () => clearInterval(interval);
+  }, []);
+
   return (
     <View style={styles.container}>
-      <ReactNativeSnapshotViewView color="#32a852" style={styles.box} />
+      <View style={[styles.box, { backgroundColor: color }]} ref={boxRef} />
+      <Button title="Capture snapshot" onPress={onCaptureSnapshot} />
+      {snapshotID && (
+        <SnapshotRenderer snapshotID={snapshotID} style={styles.box} />
+      )}
     </View>
   );
 }

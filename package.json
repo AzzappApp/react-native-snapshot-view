@@ -60,7 +60,8 @@
   },
   "homepage": "https://github.com/AzzappApp/react-native-snapshot-view#readme",
   "publishConfig": {
-    "registry": "https://registry.npmjs.org/"
+    "registry": "https://registry.npmjs.org/",
+    "access": "public"
   },
   "devDependencies": {
     "@commitlint/config-conventional": "^17.0.2",
@@ -84,7 +85,8 @@
     "typescript": "^5.2.2"
   },
   "resolutions": {
-    "@types/react": "^18.2.44"
+    "@types/react": "^18.2.44",
+    "react-native-builder-bob@^0.30.2": "patch:react-native-builder-bob@npm%3A0.30.2#./.yarn/patches/react-native-builder-bob-npm-0.30.2-5e6e62dece.patch"
   },
   "peerDependencies": {
     "react": "*",
@@ -181,7 +183,7 @@
     ]
   },
   "codegenConfig": {
-    "name": "RNReactNativeSnapshotViewViewSpec",
+    "name": "RNSnapshotViewSpec",
     "type": "all",
     "jsSrcsDir": "src",
     "outputDir": {
@@ -189,7 +191,7 @@
       "android": "android/generated"
     },
     "android": {
-      "javaPackageName": "com.azzapp.reactnativesnapshotview"
+      "javaPackageName": "com.azzapp.rnsnapshotview"
     },
     "includesGeneratedCode": true
   },
