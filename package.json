@@ -164,13 +164,15 @@
       [
         "commonjs",
         {
-          "esm": true
+          "esm": true,
+          "configFile": "./babel.config.js"
         }
       ],
       [
         "module",
         {
-          "esm": true
+          "esm": true,
+          "configFile": "./babel.config.module.js"
         }
       ],
       [
