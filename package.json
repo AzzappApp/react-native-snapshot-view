@@ -1,6 +1,6 @@
 {
   "name": "@azzapp/react-native-snapshot-view",
-  "version": "0.1.2",
+  "version": "0.1.3",
   "description": "Snapshot view for react-native",
   "source": "./src/index.tsx",
   "react-native": "src/index",
