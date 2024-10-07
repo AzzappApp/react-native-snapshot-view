@@ -1,10 +1,10 @@
 #ifdef RCT_NEW_ARCH_ENABLED
 #import "RNSnapshotRenderer.h"
 
-#import "generated/RNSnapshotViewSpec/ComponentDescriptors.h"
-#import "generated/RNSnapshotViewSpec/EventEmitters.h"
-#import "generated/RNSnapshotViewSpec/Props.h"
-#import "generated/RNSnapshotViewSpec/RCTComponentViewHelpers.h"
+#import <react/renderer/components/RNSnapshotViewSpec/ComponentDescriptors.h>
+#import <react/renderer/components/RNSnapshotViewSpec/EventEmitters.h>
+#import <react/renderer/components/RNSnapshotViewSpec/Props.h>
+#import <react/renderer/components/RNSnapshotViewSpec/RCTComponentViewHelpers.h>
 
 #import "RCTFabricComponentsPlugins.h"
 #import "RNSnapshotView.h"

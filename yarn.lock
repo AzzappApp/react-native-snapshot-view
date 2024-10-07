@@ -10822,7 +10822,7 @@ __metadata:
 
 "react-native-builder-bob@patch:react-native-builder-bob@npm%3A0.30.2#./.yarn/patches/react-native-builder-bob-npm-0.30.2-5e6e62dece.patch::locator=%40azzapp%2Freact-native-snapshot-view%40workspace%3A.":
   version: 0.30.2
-  resolution: "react-native-builder-bob@patch:react-native-builder-bob@npm%3A0.30.2#./.yarn/patches/react-native-builder-bob-npm-0.30.2-5e6e62dece.patch::version=0.30.2&hash=791c07&locator=%40azzapp%2Freact-native-snapshot-view%40workspace%3A."
+  resolution: "react-native-builder-bob@patch:react-native-builder-bob@npm%3A0.30.2#./.yarn/patches/react-native-builder-bob-npm-0.30.2-5e6e62dece.patch::version=0.30.2&hash=0ce29d&locator=%40azzapp%2Freact-native-snapshot-view%40workspace%3A."
   dependencies:
     "@babel/core": ^7.25.2
     "@babel/plugin-transform-strict-mode": ^7.24.7
@@ -10848,7 +10848,7 @@ __metadata:
     yargs: ^17.5.1
   bin:
     bob: bin/bob
-  checksum: 885c7485454bf5596bd4ad4eb3a351c01fb53445740bdd3c95584bff084724e50c0b1beaef04ef28deb52fe6d4747a63a22b5435f02b3edbb89ebc24b49071c6
+  checksum: 8961b9670cc964344bb76121b752ab02b665ef14a6ee270db813af5a02acb65a81ebbb84d5c1716ed961c2dd61d38e109f9824192c16e42edb26d203174eb600
   languageName: node
   linkType: hard
 

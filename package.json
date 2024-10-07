@@ -3,6 +3,7 @@
   "version": "0.1.2",
   "description": "Snapshot view for react-native",
   "source": "./src/index.tsx",
+  "react-native": "src/index",
   "main": "./lib/commonjs/index.js",
   "module": "./lib/module/index.js",
   "exports": {
@@ -164,15 +165,13 @@
       [
         "commonjs",
         {
-          "esm": true,
-          "configFile": "./babel.config.js"
+          "esm": true
         }
       ],
       [
         "module",
         {
-          "esm": true,
-          "configFile": "./babel.config.module.js"
+          "esm": true
         }
       ],
       [
@@ -188,14 +187,9 @@
     "name": "RNSnapshotViewSpec",
     "type": "all",
     "jsSrcsDir": "src",
-    "outputDir": {
-      "ios": "ios/generated",
-      "android": "android/generated"
-    },
     "android": {
       "javaPackageName": "com.azzapp.rnsnapshotview"
-    },
-    "includesGeneratedCode": true
+    }
   },
   "create-react-native-library": {
     "type": "view-mixed",
