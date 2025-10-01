@@ -1,71 +1,70 @@
 #import "RNSnapshotView.h"
-#import <React/RCTUIManager.h>
-#if __has_include(<React/RCTUIManagerUtils.h>)
-#import <React/RCTUIManagerUtils.h>
-#endif
+
 #import <React/RCTBridge.h>
+#import <React/RCTBridge+Private.h>
+#import <React/RCTUIManager.h>
 
 @implementation RNSnapshotView
 RCT_EXPORT_MODULE()
 
 @synthesize bridge = _bridge;
 
-- (dispatch_queue_t)methodQueue
+static NSMutableDictionary<NSString *, UIView *> *snapshotMap;
+
++ (NSMutableDictionary<NSString *, UIView *> *)getSnapShotMap
 {
-  return RCTGetUIManagerQueue();
-}
-
-static NSMutableDictionary<NSString*, UIView *> *snapshotMap;
-
-+(NSDictionary<NSString *,UIView *> *)getSnapShotMap {
   if (snapshotMap == nil) {
     snapshotMap = [[NSMutableDictionary alloc] init];
   }
   return snapshotMap;
 }
 
-RCT_EXPORT_METHOD(
-  captureSnapshot: (double)viewTag
-  resolve:(RCTPromiseResolveBlock)resolve
-  reject:(RCTPromiseRejectBlock)reject) {
-  [self.bridge.uiManager addUIBlock:^(__unused RCTUIManager *uiManager, NSDictionary<NSNumber *, UIView *> *viewRegistry) {
-    UIView *view = viewRegistry[[NSNumber numberWithDouble:viewTag]];
-    if (view != nil) {
-      UIView *snapshot = [view snapshotViewAfterScreenUpdates:NO];
-      if (snapshotMap == nil) {
-        snapshotMap = [[NSMutableDictionary alloc] init];
-      }
-      NSUUID *uuid = [NSUUID UUID];
-      NSString *str = [uuid UUIDString];
-      [snapshotMap setValue:snapshot forKey:str];
-      resolve(str);
-    } else {
+- (void)captureSnapshot:(double)viewTag
+                resolve:(RCTPromiseResolveBlock)resolve
+                 reject:(RCTPromiseRejectBlock)reject
+{
+  dispatch_async(dispatch_get_main_queue(), ^{
+    UIView *view = [self viewForReactTag:viewTag];
+    if (view == nil) {
       reject(@"not_found", @"View not found", nil);
+      return;
     }
-  }];
+
+    UIView *snapshot = [view snapshotViewAfterScreenUpdates:NO];
+    if (snapshot == nil) {
+      reject(@"snapshot_failed", @"Failed to capture snapshot", nil);
+      return;
+    }
+
+    NSString *identifier = [[NSUUID UUID] UUIDString];
+    [[RNSnapshotView getSnapShotMap] setObject:snapshot forKey:identifier];
+    resolve(identifier);
+  });
 }
 
-RCT_EXPORT_METHOD(
-  releaseSnapshot: (NSString *)uuid
-  resolve:(RCTPromiseResolveBlock)resolve
-  reject:(RCTPromiseRejectBlock)reject) {
+- (void)releaseSnapshot:(NSString *)uuid
+                resolve:(RCTPromiseResolveBlock)resolve
+                 reject:(RCTPromiseRejectBlock)reject
+{
   if (uuid != nil) {
-   if (snapshotMap == nil) {
-     snapshotMap = [[NSMutableDictionary alloc] init];
-   }
-   [snapshotMap removeObjectForKey:uuid];
+    [[RNSnapshotView getSnapShotMap] removeObjectForKey:uuid];
   }
   resolve(nil);
 }
 
-// Don't compile this code when we build for the old architecture.
-#ifdef RCT_NEW_ARCH_ENABLED
+- (UIView *)viewForReactTag:(double)viewTag
+{
+  RCTUIManager* uiManager = self.bridge.uiManager;
+  if (uiManager == nil) {
+    return nil;
+  }
+  return [uiManager viewForReactTag:[NSNumber numberWithDouble:viewTag]];
+}
+
 - (std::shared_ptr<facebook::react::TurboModule>)getTurboModule:
     (const facebook::react::ObjCTurboModule::InitParams &)params
 {
-    return std::make_shared<facebook::react::NativeRNSnapshotViewSpecJSI>(params);
+  return std::make_shared<facebook::react::NativeRNSnapshotViewSpecJSI>(params);
 }
-#endif
-
 
 @end

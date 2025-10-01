@@ -1,4 +1,3 @@
-#ifdef RCT_NEW_ARCH_ENABLED
 #import "RNSnapshotRenderer.h"
 
 #import <react/renderer/components/RNSnapshotViewSpec/ComponentDescriptors.h>
@@ -44,9 +43,14 @@ using namespace facebook::react;
   const auto &newViewProps = *std::static_pointer_cast<RNSnapshotRendererProps const>(props);
 
   if (oldViewProps.snapshotID != newViewProps.snapshotID) {
-    NSDictionary<NSString *, UIView *> *snapshotMap = [RNSnapshotView getSnapShotMap];
-    self.contentView = snapshotMap[[NSString stringWithCString:newViewProps.snapshotID.c_str()
-                                   encoding:[NSString defaultCStringEncoding]]];
+    NSString *identifier = [NSString stringWithUTF8String:newViewProps.snapshotID.c_str()];
+    if (identifier.length == 0) {
+      self.contentView = nil;
+    } else {
+      UIView *snapshot = [RNSnapshotView getSnapShotMap][identifier];
+      [snapshot removeFromSuperview];
+      self.contentView = snapshot;
+    }
   }
 
   [super updateProps:props oldProps:oldProps];
@@ -58,4 +62,3 @@ Class<RCTComponentViewProtocol> RNSnapshotRendererCls(void)
 }
 
 @end
-#endif

@@ -6,7 +6,6 @@ import com.facebook.react.bridge.ReactApplicationContext
 import com.facebook.react.module.model.ReactModuleInfo
 import com.facebook.react.module.model.ReactModuleInfoProvider
 import com.facebook.react.uimanager.ViewManager
-import java.util.ArrayList
 import java.util.HashMap
 
 class ReactNativeSnapshotViewPackage : TurboReactPackage() {
@@ -21,7 +20,6 @@ class ReactNativeSnapshotViewPackage : TurboReactPackage() {
   override fun getReactModuleInfoProvider(): ReactModuleInfoProvider {
     return ReactModuleInfoProvider {
       val moduleInfos: MutableMap<String, ReactModuleInfo> = HashMap()
-      val isTurboModule: Boolean = BuildConfig.IS_NEW_ARCHITECTURE_ENABLED
       moduleInfos[ReactNativeSnapshotViewModule.NAME] = ReactModuleInfo(
         ReactNativeSnapshotViewModule.NAME,
         ReactNativeSnapshotViewModule.NAME,
@@ -29,14 +27,12 @@ class ReactNativeSnapshotViewPackage : TurboReactPackage() {
         false,  // needsEagerInit
         true,  // hasConstants
         false,  // isCxxModule
-        isTurboModule // isTurboModule
+        true // isTurboModule
       )
       moduleInfos
     }
   }
   override fun createViewManagers(reactContext: ReactApplicationContext): List<ViewManager<*, *>> {
-    val viewManagers: MutableList<ViewManager<*, *>> = ArrayList()
-    viewManagers.add(RNSnapshotRendererManager())
-    return viewManagers
+    return listOf(RNSnapshotRendererManager())
   }
 }
