@@ -19,10 +19,7 @@ import com.facebook.react.bridge.ReactApplicationContext
 import com.facebook.react.bridge.ReactMethod
 import com.facebook.react.common.annotations.UnstableReactNativeAPI
 import com.facebook.react.fabric.FabricUIManager
-import com.facebook.react.uimanager.NativeViewHierarchyManager
-import com.facebook.react.uimanager.UIBlock
 import com.facebook.react.uimanager.UIManagerHelper
-import com.facebook.react.uimanager.UIManagerModule
 import com.facebook.react.uimanager.common.UIManagerType
 import java.util.Collections
 import java.util.LinkedList
@@ -32,7 +29,7 @@ import java.util.concurrent.TimeUnit
 
 
 class ReactNativeSnapshotViewModule internal constructor(context: ReactApplicationContext) :
-  RNSnapshotViewSpec(context) {
+  NativeRNSnapshotViewSpec(context) {
 
   override fun getName(): String {
     return NAME
@@ -59,29 +56,15 @@ class ReactNativeSnapshotViewModule internal constructor(context: ReactApplicati
       }
     }
 
-    if (BuildConfig.IS_NEW_ARCHITECTURE_ENABLED) {
-      val uiManager = UIManagerHelper.getUIManager(reactApplicationContext, UIManagerType.FABRIC)
-      if (uiManager is FabricUIManager) {
-        uiManager.addUIBlock { uiBlockViewResolver ->
-          val view = uiBlockViewResolver.resolveView(viewTag.toInt())
-          handleView(view);
-        }
-      } else {
-        promise.reject("not_found", "Cannot obtain UIManager")
-        return
-      }
-    } else {
-      val uiManager = reactApplicationContext.getNativeModule(
-        UIManagerModule::class.java
-      )
-      if (uiManager == null) {
-        promise.reject("not_found", "Cannot obtain UIManager")
-        return
-      }
-      uiManager.addUIBlock(UIBlock { nativeViewHierarchyManager: NativeViewHierarchyManager ->
-        val view = nativeViewHierarchyManager.resolveView(viewTag.toInt())
-        handleView(view)
-      })
+    val uiManager = UIManagerHelper.getUIManager(reactApplicationContext, UIManagerType.FABRIC)
+    if (uiManager !is FabricUIManager) {
+      promise.reject("not_found", "Cannot obtain UIManager")
+      return
+    }
+
+    uiManager.addUIBlock { uiBlockViewResolver ->
+      val view = uiBlockViewResolver.resolveView(viewTag.toInt())
+      handleView(view)
     }
   }
 

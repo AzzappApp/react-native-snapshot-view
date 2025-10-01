@@ -25,10 +25,11 @@ const snapshotID = await captureSnapshot(viewRef.current);
 
 >:warning: captured snapshot are kept in memory, either use `releaseSnapshot` to release them, or let the `SnapshotRenderer` component release the snapshot on unmount.
 
-
 ## Contributing
 
-See the [contributing guide](CONTRIBUTING.md) to learn how to contribute to the repository and the development workflow.
+- [Development workflow](CONTRIBUTING.md#development-workflow)
+- [Sending a pull request](CONTRIBUTING.md#sending-a-pull-request)
+- [Code of conduct](CODE_OF_CONDUCT.md)
 
 ## License
 

@@ -1,5 +1,5 @@
-import { forwardRef, useEffect, useRef, type ForwardedRef } from 'react';
-import type { View, ViewProps } from 'react-native';
+import { useEffect, useRef } from 'react';
+import type { ViewProps } from 'react-native';
 import RNSnapshotRenderer from './RNSnapshotRendererNativeComponent';
 import { releaseSnapshot } from '.';
 
@@ -19,10 +19,11 @@ export type SnapshotRendererProps = Omit<ViewProps, 'children'> & {
 /**
  * A view that renders a snapshot of a view.
  */
-const SnapshotRenderer = (
-  { snapshotID, autoReleaseSnapshot = true, ...props }: SnapshotRendererProps,
-  forwardedRef: ForwardedRef<View>
-) => {
+const SnapshotRenderer = ({
+  snapshotID,
+  autoReleaseSnapshot = true,
+  ...props
+}: SnapshotRendererProps) => {
   const autoReleaseSnapshotRef = useRef(autoReleaseSnapshot);
   useEffect(() => {
     autoReleaseSnapshotRef.current = autoReleaseSnapshot;
@@ -36,9 +37,7 @@ const SnapshotRenderer = (
     },
     [snapshotID]
   );
-  return (
-    <RNSnapshotRenderer ref={forwardedRef} snapshotID={snapshotID} {...props} />
-  );
+  return <RNSnapshotRenderer snapshotID={snapshotID} {...props} />;
 };
 
-export default forwardRef(SnapshotRenderer);
+export default SnapshotRenderer;

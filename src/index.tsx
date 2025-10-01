@@ -1,28 +1,5 @@
-import { findNodeHandle, NativeModules, Platform } from 'react-native';
-
-const LINKING_ERROR =
-  `The package '@azzapp/react-native-snapshot-view' doesn't seem to be linked. Make sure: \n\n` +
-  Platform.select({ ios: "- You have run 'pod install'\n", default: '' }) +
-  '- You rebuilt the app after installing the package\n' +
-  '- You are not using Expo Go\n';
-
-// @ts-expect-error
-const isTurboModuleEnabled = global.__turboModuleProxy != null;
-
-const RNSnapshotViewModule = isTurboModuleEnabled
-  ? require('./NativeRNSnapshotView').default
-  : NativeModules.RNSnapshotView;
-
-const RNSnapshotView = RNSnapshotViewModule
-  ? RNSnapshotViewModule
-  : new Proxy(
-      {},
-      {
-        get() {
-          throw new Error(LINKING_ERROR);
-        },
-      }
-    );
+import { findNodeHandle } from 'react-native';
+import RNSnapshotView from './NativeRNSnapshotView';
 
 /**
  * Captures a snapshot of a view. The snapshot can be rendered using the `SnapshotRenderer` component.
