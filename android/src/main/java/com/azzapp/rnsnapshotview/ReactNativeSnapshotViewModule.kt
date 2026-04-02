@@ -69,6 +69,52 @@ class ReactNativeSnapshotViewModule internal constructor(context: ReactApplicati
   }
 
   @ReactMethod
+  override fun snapshotScreen(promise: Promise) {
+    val activity = reactApplicationContext.currentActivity
+    if (activity == null) {
+      promise.reject("not_found", "Activity not found")
+      return
+    }
+    val window = activity.window
+    if (window == null) {
+      promise.reject("not_found", "Window not found")
+      return
+    }
+    val decorView = window.decorView
+    val bitmap = Bitmap.createBitmap(decorView.width, decorView.height, Bitmap.Config.ARGB_8888)
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+      PixelCopy.request(window, bitmap, { result ->
+        if (result == PixelCopy.SUCCESS) {
+          val uuid = UUID.randomUUID().toString()
+          snapshotMap[uuid] = bitmap
+          promise.resolve(uuid)
+        } else {
+          bitmap.recycle()
+          promise.reject("snapshot_failed", "PixelCopy failed with result $result")
+        }
+      }, Handler(Looper.getMainLooper()))
+    } else {
+      decorView.draw(Canvas(bitmap))
+      val uuid = UUID.randomUUID().toString()
+      snapshotMap[uuid] = bitmap
+      promise.resolve(uuid)
+    }
+  }
+
+  @ReactMethod
+  override fun duplicateSnapshot(snapshotID: String, promise: Promise) {
+    val original = snapshotMap[snapshotID]
+    if (original == null) {
+      promise.reject("not_found", "Snapshot not found")
+      return
+    }
+    val copy = original.copy(original.config ?: Bitmap.Config.ARGB_8888, false)
+    val uuid = UUID.randomUUID().toString()
+    snapshotMap[uuid] = copy
+    promise.resolve(uuid)
+  }
+
+  @ReactMethod
   override fun releaseSnapshot(snapshotID: String, promise: Promise) {
     snapshotMap.remove(snapshotID)
     promise.resolve(null);

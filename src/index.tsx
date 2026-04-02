@@ -22,6 +22,25 @@ export function captureSnapshot(
 }
 
 /**
+ * Captures a snapshot of the entire screen.
+ *
+ * @returns A promise that resolves to the ID of the snapshot. The snapshot should be released when no longer needed.
+ */
+export function snapshotScreen(): Promise<string> {
+  return RNSnapshotView.snapshotScreen();
+}
+
+/**
+ * Duplicates a snapshot. The duplicate is independent and must be released separately.
+ *
+ * @param snapshotID The ID of the snapshot to duplicate.
+ * @returns A promise that resolves to the ID of the duplicated snapshot.
+ */
+export function duplicateSnapshot(snapshotID: string): Promise<string> {
+  return RNSnapshotView.duplicateSnapshot(snapshotID);
+}
+
+/**
  * Releases a snapshot.
  *
  * @param snapshotID The ID of the snapshot to release.

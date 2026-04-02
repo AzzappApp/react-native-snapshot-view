@@ -42,6 +42,51 @@ static NSMutableDictionary<NSString *, UIView *> *snapshotMap;
   });
 }
 
+- (void)snapshotScreen:(RCTPromiseResolveBlock)resolve
+                reject:(RCTPromiseRejectBlock)reject
+{
+  dispatch_async(dispatch_get_main_queue(), ^{
+    UIWindow *window = [[UIApplication sharedApplication] keyWindow];
+    if (window == nil) {
+      reject(@"not_found", @"Key window not found", nil);
+      return;
+    }
+
+    UIView *snapshot = [window snapshotViewAfterScreenUpdates:NO];
+    if (snapshot == nil) {
+      reject(@"snapshot_failed", @"Failed to capture screen snapshot", nil);
+      return;
+    }
+
+    NSString *identifier = [[NSUUID UUID] UUIDString];
+    [[RNSnapshotView getSnapShotMap] setObject:snapshot forKey:identifier];
+    resolve(identifier);
+  });
+}
+
+- (void)duplicateSnapshot:(NSString *)snapshotID
+                  resolve:(RCTPromiseResolveBlock)resolve
+                   reject:(RCTPromiseRejectBlock)reject
+{
+  dispatch_async(dispatch_get_main_queue(), ^{
+    UIView *original = [[RNSnapshotView getSnapShotMap] objectForKey:snapshotID];
+    if (original == nil) {
+      reject(@"not_found", @"Snapshot not found", nil);
+      return;
+    }
+
+    UIView *duplicate = [original snapshotViewAfterScreenUpdates:NO];
+    if (duplicate == nil) {
+      reject(@"snapshot_failed", @"Failed to duplicate snapshot", nil);
+      return;
+    }
+
+    NSString *identifier = [[NSUUID UUID] UUIDString];
+    [[RNSnapshotView getSnapShotMap] setObject:duplicate forKey:identifier];
+    resolve(identifier);
+  });
+}
+
 - (void)releaseSnapshot:(NSString *)uuid
                 resolve:(RCTPromiseResolveBlock)resolve
                  reject:(RCTPromiseRejectBlock)reject

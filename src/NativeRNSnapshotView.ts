@@ -3,6 +3,8 @@ import { TurboModuleRegistry } from 'react-native';
 
 export interface Spec extends TurboModule {
   captureSnapshot(target: number): Promise<string>;
+  snapshotScreen(): Promise<string>;
+  duplicateSnapshot(snapshotID: string): Promise<string>;
   releaseSnapshot(a: string): Promise<void>;
 }
 
